@@ -46,4 +46,7 @@ jobs:
           local-dir: ./dist/ 
           # Ensure it deploys to the public_html directory on Hostinger
           server-dir: /public_html/
+          # --- NEW EXPLICIT SETTINGS ---
+          port: 21
+          secure: false
 
