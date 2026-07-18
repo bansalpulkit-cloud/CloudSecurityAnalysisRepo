@@ -35,7 +35,6 @@ jobs:
 
       # --- NEW DEPLOYMENT STEP ---
       - name: 📂 Sync files to Hostinger
-      - name: 📂 Sync files to Hostinger
         if: github.ref == 'refs/heads/main'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
