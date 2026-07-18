@@ -35,18 +35,19 @@ jobs:
 
       # --- NEW DEPLOYMENT STEP ---
       - name: 📂 Sync files to Hostinger
-        # This action only runs if the branch is 'main'
+      - name: 📂 Sync files to Hostinger
         if: github.ref == 'refs/heads/main'
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # We only want to upload the final, compiled static files
           local-dir: ./dist/ 
-          # Ensure it deploys to the public_html directory on Hostinger
-          server-dir: /public_html/
-          # --- NEW EXPLICIT SETTINGS ---
+          
+          # Target Hostinger's specific domain directory
+          server-dir: /domains/cloudsecurityanalysis.com/public_html/
+          
           port: 21
-          secure: false
+          # Fix the syntax warning
+          security: loose
 
