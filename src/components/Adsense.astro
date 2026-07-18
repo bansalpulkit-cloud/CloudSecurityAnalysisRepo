@@ -1,0 +1,43 @@
+---
+interface Props {
+  adSlot: string; // The specific ID for the ad unit you generate in Google AdSense
+}
+
+const { adSlot } = Astro.props;
+---
+
+<div class="ad-container" aria-hidden="true">
+  <span class="ad-label">Advertisement</span>
+  
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" 
+       data-ad-slot={adSlot}
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+       
+  <script is:inline>
+       (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+
+<style>
+  .ad-container {
+    margin: 2rem 0;
+    text-align: center;
+    background-color: var(--color-bg-secondary);
+    border: 1px dashed var(--color-bg-border);
+    border-radius: 8px;
+    padding: 1rem;
+    min-height: 250px; /* Prevents Cumulative Layout Shift (CLS) */
+  }
+
+  .ad-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+</style>

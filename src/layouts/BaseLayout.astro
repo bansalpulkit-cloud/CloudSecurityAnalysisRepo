@@ -26,6 +26,13 @@ const socialImageURL = new URL(image, Astro.site);
 <!DOCTYPE html>
 <html lang="en">
   <head>
+  <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL} />
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3483356124501726" crossorigin="anonymous"></script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
@@ -66,5 +73,6 @@ const socialImageURL = new URL(image, Astro.site);
     margin: 0 auto;
     padding: 2rem 1rem;
     flex-grow: 1;
+
   }
 </style>
