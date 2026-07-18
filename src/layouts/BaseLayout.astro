@@ -1,0 +1,70 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_CONFIG } from '../utils/config';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  articleDate?: string; // Optional: Used to tell platforms when the post was published
+}
+
+const { 
+  title = SITE_CONFIG.title, 
+  description = SITE_CONFIG.description,
+  image = SITE_CONFIG.defaultOgImage,
+  articleDate
+} = Astro.props;
+
+// Automatically construct absolute URLs (Social platforms require absolute URLs for images)
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const socialImageURL = new URL(image, Astro.site);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    
+    <link rel="canonical" href={canonicalURL} />
+
+    <meta property="og:type" content={articleDate ? "article" : "website"} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={socialImageURL} />
+    {articleDate && <meta property="article:published_time" content={articleDate} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageURL} />
+  </head>
+  <body>
+    
+    <Header />
+    
+    <main class="layout-container">
+      <slot />
+    </main>
+
+    <Footer />
+    
+  </body>
+</html>
+
+<style>
+  .layout-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    flex-grow: 1;
+  }
+</style>

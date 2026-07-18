@@ -1,0 +1,83 @@
+---
+const pathnames = Astro.url.pathname.split('/').filter((x) => x);
+
+// Generate the structured data array for Google
+const schemaItemList = pathnames.map((name, index) => {
+  const cleanName = name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  return {
+    "@type": "ListItem",
+    "position": index + 1,
+    "name": cleanName,
+    "item": new URL(`/${pathnames.slice(0, index + 1).join('/')}`, Astro.site).toString()
+  };
+});
+---
+
+<nav aria-label="Breadcrumb" class="breadcrumb-container">
+  <ol class="breadcrumb-list">
+    <li class="breadcrumb-item">
+      <a href="/">Home</a>
+    </li>
+
+    {pathnames.map((name, index) => {
+      const href = `/${pathnames.slice(0, index + 1).join('/')}`;
+      const isLast = index === pathnames.length - 1;
+      const cleanName = name.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+      return (
+        <>
+          <li class="breadcrumb-separator" aria-hidden="true">/</li>
+          <li class="breadcrumb-item">
+            {isLast ? (
+              <span class="current-page" aria-current="page">{cleanName}</span>
+            ) : (
+              <a href={href}>{cleanName}</a>
+            )}
+          </li>
+        </>
+      );
+    })}
+  </ol>
+</nav>
+
+<script type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": schemaItemList
+})} />
+
+<style>
+  .breadcrumb-container {
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+  }
+
+  .breadcrumb-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .breadcrumb-item a {
+    color: var(--color-text-muted);
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-item a:hover {
+    color: var(--color-accent);
+  }
+
+  .breadcrumb-separator {
+    color: var(--color-bg-border);
+    margin: 0 0.5rem;
+  }
+
+  .current-page {
+    color: var(--color-text-primary);
+    font-weight: 500;
+    pointer-events: none;
+  }
+</style>

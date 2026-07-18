@@ -1,0 +1,47 @@
+---
+import { getPublishedBlogPosts } from '../../utils/content';
+import { SITE_CONFIG } from '../../utils/config';
+import type { Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+
+// 1. This function tells Astro how many pages to generate at build time
+export async function getStaticPaths({ paginate }) {
+  const posts = await getPublishedBlogPosts();
+  // We pass the posts array and our central config value to Astro's paginate function
+  return paginate(posts, { pageSize: SITE_CONFIG.postsPerPage });
+}
+
+// 2. We define strict types for the props Astro automatically passes to this page
+interface Props {
+  page: Page<CollectionEntry<'blog'>>;
+}
+
+const { page } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Blog - Page {page.currentPage} | {SITE_CONFIG.title}</title>
+  </head>
+  <body>
+    <h1>Cybersecurity Articles</h1>
+    
+    <ul>
+      {page.data.map((post) => (
+        <li>
+          <a href={`/blog/${post.id}`}>{post.data.title}</a>
+          <p>{post.data.description}</p>
+        </li>
+      ))}
+    </ul>
+
+    <nav aria-label="Blog pages">
+      {page.url.prev ? <a href={page.url.prev}>&larr; Previous</a> : <span aria-disabled="true">&larr; Previous</span>}
+      
+      <span>Page {page.currentPage} of {page.lastPage}</span>
+      
+      {page.url.next ? <a href={page.url.next}>Next &rarr;</a> : <span aria-disabled="true">Next &rarr;</span>}
+    </nav>
+  </body>
+</html>

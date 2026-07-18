@@ -1,5 +1,8 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
-// https://astro.build/config
-export default defineConfig({});
+export default defineConfig({
+  // Your actual production domain is required for absolute sitemap URLs
+  site: 'https://cloudsecurityanalysis.com',
+  integrations: [sitemap()]
+});

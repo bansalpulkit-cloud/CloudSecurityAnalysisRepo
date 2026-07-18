@@ -21,10 +21,25 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci 
 
       - name: Check TypeScript Strictness
         run: npx tsc --noEmit
 
-      - name: Build Astro Project
+      - name: Build the Astro Site
         run: npm run build
+
+      # --- NEW DEPLOYMENT STEP ---
+      - name: 📂 Sync files to Hostinger
+        # This action only runs if the branch is 'main'
+        if: github.ref == 'refs/heads/main'
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # We only want to upload the final, compiled static files
+          local-dir: ./dist/ 
+          # Ensure it deploys to the public_html directory on Hostinger
+          server-dir: /public_html/
+

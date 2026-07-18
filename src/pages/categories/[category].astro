@@ -1,0 +1,53 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getUniqueCategories, getPublishedBlogPosts } from '../../utils/content';
+
+// This tells Astro exactly which category pages to generate statically at build time
+export async function getStaticPaths() {
+  const categories = await getUniqueCategories();
+  const allPosts = await getPublishedBlogPosts();
+
+  return categories.map((category) => {
+    // Filter posts that belong strictly to this category
+    const filteredPosts = allPosts.filter((post) => post.data.category === category);
+    
+    return {
+      // Create a URL-safe slug for the category (e.g., "Cloud Security" -> "cloud-security")
+      params: { category: category.toLowerCase().replace(/\s+/g, '-') },
+      props: { categoryName: category, posts: filteredPosts },
+    };
+  });
+}
+
+const { categoryName, posts } = Astro.props;
+---
+
+<BaseLayout 
+  title={`${categoryName} Articles | Cloud Security Analysis`} 
+  description={`Explore all enterprise-grade articles related to ${categoryName}.`}
+>
+  <div class="mb-10 border-b border-slate-800 pb-6 mt-4">
+    <h1 class="text-3xl font-bold text-slate-50">
+      Category: <span class="text-emerald-400">{categoryName}</span>
+    </h1>
+    <p class="text-slate-400 mt-2">
+      {posts.length} technical article{posts.length !== 1 ? 's' : ''} found.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+     {posts.map(post => (
+        <article class="bg-slate-800/40 rounded-lg p-6 border border-slate-700 hover:border-slate-500 transition-colors">
+          <h2 class="text-xl font-bold text-slate-100 mb-2">
+            <a href={`/blog/${post.id}`} class="hover:text-emerald-300 transition-colors">
+              {post.data.title}
+            </a>
+          </h2>
+          <p class="text-slate-400 text-sm mb-4">{post.data.description}</p>
+          <a href={`/blog/${post.id}`} class="text-emerald-400 text-sm font-medium hover:underline">
+            Read Analysis &rarr;
+          </a>
+        </article>
+      ))}
+  </div>
+</BaseLayout>

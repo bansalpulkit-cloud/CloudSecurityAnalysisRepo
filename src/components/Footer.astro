@@ -1,0 +1,32 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>&copy; {currentYear} Cloud Security Analysis. All rights reserved.</p>
+    <p class="footer-tagline">Built for high-performance knowledge sharing.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    width: 100%;
+    border-top: 1px solid var(--color-bg-border);
+    padding: 2rem 0;
+    margin-top: auto; /* Pushes footer to the bottom of the flex container */
+  }
+
+  .footer-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .footer-tagline {
+    margin-top: 0.5rem;
+  }
+</style>
