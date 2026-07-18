@@ -23,8 +23,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci 
 
-      - name: Check TypeScript Strictness
-        run: npx tsc --noEmit
+      - name: Check TypeScript
+        run: npx typescript --noEmit
 
       - name: Build the Astro Site
         run: npm run build
