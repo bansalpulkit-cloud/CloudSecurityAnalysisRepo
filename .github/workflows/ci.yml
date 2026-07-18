@@ -21,7 +21,11 @@ jobs:
           cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci 
+        run: npm ci
+
+      # --- NEW STEP: Generate Astro Types ---
+      - name: Sync Astro Types
+        run: npx astro sync
 
       - name: Check TypeScript
         run: npx typescript --noEmit
